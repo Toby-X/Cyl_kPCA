@@ -9,6 +9,12 @@ Vx.train = read_excel("cylinder/pointx.xlsx")
 Vy.train = read_excel("cylinder/pointu2.xlsx")
 P.train = read_excel("cylinder/pointp.xlsx")
 
+mu = rowMeans(Vx.train)
+U_c = Vx.train-mu
+U_c = as.matrix(U_c)
+Sig = U_c%*%t(U_c)
+U = HeteroPCA(Sig,5,max.iter = 1000)
+
 ggplot(loc)+
   geom_point(aes(V1,V2))
 
