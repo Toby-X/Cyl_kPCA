@@ -29,7 +29,7 @@ Vy.train.svd = svd(Vy.train)
 library(elasticnet)
 Vx.dist = dist(Vx.train.mat)
 Vx.dist = as.matrix(Vx.dist)
-k.gaussian = exp(-Vx.dist)
+k.gaussian = exp(-Vx.dist/100)
 
 K.central <- function(K){
   n = nrow(K)
@@ -43,7 +43,9 @@ K.central <- function(K){
 
 K = K.central(k.gaussian)
 sigma.sum = psych::tr(K)
-K.svd = svd(K)
+K.svd = RSpectra::eigs(K,10)
+cumsum(K.svd$values/sigma.sum)
+leading.vector = K.svd$vectors[,1:10]
 which(cumsum(K.svd$d)/sigma.sum>0.99)[1]
 #960 and that is too many, how about controlling on the same level of PCs?
 
