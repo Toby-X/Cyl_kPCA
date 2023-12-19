@@ -25,7 +25,7 @@ for m = 1:length(theta1)
 %                 sum=sum+1;
 %             end
 %         end
-%         mean_rel_err1=mean_rel_err1*100/sum;  %以百分数表示
+%         mean_rel_err1=mean_rel_err1*100/sum;  % percentage
 % 
 %         mean_rel_err2=0;
 %         num_order=10.^(floor(log10(abs(max(val2(:,specie))))));
@@ -37,7 +37,7 @@ for m = 1:length(theta1)
 %                 sum=sum+1;
 %             end
 %         end
-%         mean_rel_err2=mean_rel_err2*100/sum;  %以百分数表示
+%         mean_rel_err2=mean_rel_err2*100/sum;  % percentage
 %         mean_rel_err = mean([mean_rel_err1, mean_rel_err2]);
         
         if rmse < errmin
