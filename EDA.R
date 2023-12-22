@@ -58,3 +58,30 @@ res2 = matrix(rep(mat.mult(k.gaussian, N1vec),nrow(k.gaussian)),nrow=nrow(k.gaus
 tic()
 N1%*%k.gaussian
 toc()
+
+nmf_eu <- function(X,K,eps=1e-6,maxit=1e3){
+  # mu = min(X)-1
+  # X = X-mu
+  err = 10
+  iter = 0
+  n = nrow(X)
+  p = ncol(X)
+  U = matrix(rbeta(n*K,1,1),nrow=n)
+  score = matrix(rbeta(K*p,1,1),nrow=K)
+  while (err >= eps & iter <= maxit) {
+    iter = iter + 1
+    score_tmp = score*(t(U)%*%X)/(t(U)%*%U%*%score)
+    U_tmp = U*(X%*%t(score))/(U%*%score%*%t(score))
+    err1 = max(abs(U_tmp-U))
+    err2 = max(abs(score-score_tmp))
+    err = max(err1,err2)
+    U = U_tmp
+    score = score_tmp
+  }
+  # return(list(U=U,score=score,iter=iter,mu=mu))
+  return(list(U=U,score=score,iter=iter))
+}
+
+Vx_nmf = nmf_eu(as.matrix(Vx.train),5)
+X = matrix(rpois(500*100,5),nrow=500)
+Vx_nmf = nmf_eu(X,5)
