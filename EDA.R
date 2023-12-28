@@ -43,6 +43,20 @@ K.central <- function(K){
 
 K = K.central(k.gaussian)
 sigma.sum = psych::tr(K)
+K.evd = eigen(K)
+K.evd$proportion = K.evd$values/sigma.sum
+K.evd$idx = 1:nrow(K.evd$vectors)
+K.evd$explianed = cumsum(K.evd$proportion)
+
+K.df = data.frame(K.evd$idx,K.evd$proportion,K.evd$explianed)
+colnames(K.df) = c("idx","proportion","explained")
+ggplot(K.df[1:200,],aes(idx,explained))+
+  geom_point()+
+  geom_line(lwd=.75)+
+  geom_hline(yintercept = .95, col="blue", lty = 2)+
+  ylab("Explained Proportion")+
+  xlab("Number of Principal Components")
+
 K.svd = RSpectra::eigs(K,10)
 cumsum(K.svd$values/sigma.sum)
 leading.vector = K.svd$vectors[,1:10]
